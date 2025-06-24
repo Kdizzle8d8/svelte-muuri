@@ -1,3 +1,23 @@
+/**
+ * Type for passing a custom resize handler to grid items.
+ *
+ * @param width The new width of the item
+ * @param height The new height of the item
+ *
+ * @returns Caller should return true if the resize is allowed, false otherwise.
+ *
+ * @example
+ * ```ts
+ * const resizeHandler: ResizeHandler = (width, height) => {
+ *   if (width < 100 || height < 100) {
+ *     return false;
+ *   }
+ *   return true;
+ * };
+ * ```
+ */
+export type ResizeHandler = (width: number, height: number) => boolean;
+
 // Muuri Grid Configuration Types
 export interface MuuriLayoutConfig {
   fillGaps?: boolean;
@@ -30,7 +50,7 @@ export interface MuuriGridProps {
   class?: string;
 }
 
-// Muuri Item Props Interface  
+// Muuri Item Props Interface
 export interface MuuriItemProps {
   id?: string | number;
   class?: string;
