@@ -29,12 +29,18 @@ export interface MuuriDragRelease {
  *   - `{width, height}`: Accept the resize with these dimensions (can be original or modified)
  */
 export type ResizeHandler = (
-  width: number,
-  height: number
+  newDimensions: {
+    width: number,
+    height: number
+  },
+  prevDimensions: {
+    width: number,
+    height: number
+  }
 ) => {
-  width: number;
-  height: number;
-} | null | undefined;
+  width: number | null;
+  height: number | null;
+};
 
 // Muuri Grid Props Interface
 export interface MuuriGridProps {

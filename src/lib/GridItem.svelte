@@ -14,6 +14,7 @@
     aspectRatio?: number; // If provided will always force aspect ratio, even if resizeHandler is provided
     children: Snippet;
     resizeHandler?: ResizeHandler;
+    lockedDimensions?: {width: boolean, height: boolean};
   }
 
   let {
@@ -22,6 +23,7 @@
     height = 100,
     resizeable = true,
     aspectRatio,
+    lockedDimensions = {width: false, height: false},
     children,
     resizeHandler
 
@@ -32,11 +34,10 @@
   let mounted = $state(false);
   onMount(() => {
     mounted = true;
-    const result = resizeHandler?.(width, height);
+    const result = resizeHandler?.({width, height}, {width, height});
     if (result) {
-      const {width: newWidth, height: newHeight} = result;
-      width = newWidth;
-      height = newHeight;
+      width = result.width ?? width;
+      height = result.height ?? height;
     }
   });
 
@@ -62,23 +63,55 @@
       data-resize-handle
       use:resize={{
         onResize: (newWidth, newHeight) => {
-          let finalWidth = newWidth;
-          let finalHeight = newHeight;
+          const prevWidth = width;
+          const prevHeight = height;
+
+          // Helper function to apply constraints while respecting locked dimensions
+          const applyConstraints = (constraintFn: (w: number, h: number) => {width: number | null, height: number | null}) => {
+            if (lockedDimensions.width && lockedDimensions.height) {
+              return { width: prevWidth, height: prevHeight };
+            }
+            
+            const inputWidth = lockedDimensions.width ? prevWidth : newWidth;
+            const inputHeight = lockedDimensions.height ? prevHeight : newHeight;
+            
+            const result = constraintFn(inputWidth, inputHeight);
+            
+            // Locked dimensions are guaranteed to never change
+            return {
+              width: lockedDimensions.width ? prevWidth : (result.width ?? prevWidth),
+              height: lockedDimensions.height ? prevHeight : (result.height ?? prevHeight)
+            };
+          };
+
+          let result = { width: newWidth, height: newHeight };
           
           if (resizeHandler) {
-            const result = resizeHandler(newWidth, newHeight);
-            if (result) {
-              finalWidth = result.width;
-              finalHeight = result.height;
-            }
+            result = applyConstraints((w, h) => 
+              resizeHandler({width: w, height: h}, {width: prevWidth, height: prevHeight})
+            );
           }
           
+          // Aspect ratio is ensured regardless of resizeHandler's output
           if (aspectRatio) {
-            finalWidth = finalHeight * aspectRatio;
+            result = applyConstraints((w, h) => {
+              if (lockedDimensions.width) {
+                return { width: w, height: w / aspectRatio };
+              } else if (lockedDimensions.height) {
+                return { width: h * aspectRatio, height: h };
+              } else {
+                return { width: h * aspectRatio, height: h };
+              }
+            });
           }
           
-          width = finalWidth;
-          height = finalHeight;
+          // still apply basic locked dimension constraints even if no other constraints exist
+          if (!resizeHandler && !aspectRatio) {
+            result = applyConstraints((w, h) => ({ width: w, height: h }));
+          }
+          
+          width = result.width;
+          height = result.height;
         }
       }}>
     </div>
