@@ -78,14 +78,6 @@
   bind:this={gridElement}
   class={twMerge(
     "relative",
-    "border border-red-500",
-    "mx-auto my-8",
-    "h-full",
-    "w-full",
-    "bg-[#f5f5f5]",
-    "rounded-lg",
-    "shadow-[0_2px_8px_rgba(0,0,0,0.07)]",
-    "px-0 py-2.5",
     className
   )}>
   {@render children()}

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { getContext, onMount } from "svelte";
-  import { resize } from "./resize.svelte.ts";
-  import type { ResizeHandler } from "./types.ts";
+  import { resize } from "./resize.svelte";
+  import type { Dimensions, ResizeHandler } from "./types.js";
 
   const parentContext: { refresh: () => void } = getContext("grid");
 
@@ -42,15 +42,12 @@
   });
 
   $effect(() => {
-    if (item) {
+    if (item && mounted) {
       item.style.width = `${width}px`;
       item.style.height = `${height}px`;
-      if (mounted) {
-        parentContext.refresh();
-      }
+      parentContext.refresh();
     }
   });
-  let resizeHandle = $state<HTMLElement>();
 </script>
 
 <div bind:this={item} class="item {className}">
@@ -67,7 +64,7 @@
           const prevHeight = height;
 
           // Helper function to apply constraints while respecting locked dimensions
-          const applyConstraints = (constraintFn: (w: number, h: number) => {width: number | null, height: number | null}) => {
+          const applyConstraints = (constraintFn: (w: number, h: number) => Dimensions) => {
             if (lockedDimensions.width && lockedDimensions.height) {
               return { width: prevWidth, height: prevHeight };
             }
@@ -79,12 +76,12 @@
             
             // Locked dimensions are guaranteed to never change
             return {
-              width: lockedDimensions.width ? prevWidth : (result.width ?? prevWidth),
-              height: lockedDimensions.height ? prevHeight : (result.height ?? prevHeight)
+              width: lockedDimensions.width ? prevWidth : result.width,
+              height: lockedDimensions.height ? prevHeight : result.height
             };
           };
 
-          let result = { width: newWidth, height: newHeight };
+          let result: Dimensions = { width: newWidth, height: newHeight };
           
           if (resizeHandler) {
             result = applyConstraints((w, h) => 

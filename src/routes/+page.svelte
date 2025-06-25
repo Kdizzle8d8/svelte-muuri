@@ -19,7 +19,6 @@
   };
   // Start with no dimensions locked
   let dimLocked = $state({width: false, height: false});
-  let freeformDims = $state({w:100, h:100});
 </script>
 
 <h2>Simple Muuri Example</h2>
@@ -31,7 +30,7 @@
     <div class="absolute inset-0" style="transform: scale({scale})"></div>
   </div>
 {/snippet}
-<Grid class="h-full w-[80%] gap-2 border-2">
+<Grid class="h-full w-[80%] gap-2 border-2 border border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.07)] px-0 py-2.5">
   {#each items as item (item.id)}
     <GridItem
       width={getDimensions(item).width}
@@ -49,16 +48,10 @@
       </div>
     </GridItem>
   {/each}
-  <GridItem lockedDimensions={dimLocked} width={freeformDims.w} height={freeformDims.h}>
+  <GridItem width={100} height={100}>
     <div
       class="text-small flex size-full flex-col items-center justify-center overflow-hidden border-2 border-black bg-red-500 p-0 text-center text-white">
       Freeform
-        <button class="rounded-md p-2 text-xs" class:bg-green-500={dimLocked.width} onclick={() => {
-          dimLocked.width = !dimLocked.width;
-        }}>Lock Width</button>
-        <button class="rounded-md p-2 text-xs" class:bg-green-500={dimLocked.height} onclick={() => {
-          dimLocked.height = !dimLocked.height;
-        }}>Lock Height</button>
     </div>
   </GridItem>
   <GridItem
