@@ -62,8 +62,8 @@
     </div>
   </GridItem>
   <GridItem
-    width={100}
-    height={100}
+    width={200}
+    height={200}
     lockedDimensions={dimLocked}
     resizeHandler={(newDimensions, prevDimensions) => {
       // Example use case of a custom resize handler with min/max aspect ratios
@@ -125,7 +125,7 @@
           }}
         >H</button>
       </div>
-      4:3 Minimum
+      4:3 Minimum 21:9 Maximum
     </div>
   </GridItem>
 </Grid>
