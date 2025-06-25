@@ -18,6 +18,24 @@ export interface MuuriDragRelease {
   easing?: string;
 }
 
+// Resize Handler Type
+/**
+ * Handler function for grid item resize events.
+ * 
+ * @param width - The new width being proposed for the item
+ * @param height - The new height being proposed for the item
+ * @returns Either:
+ *   - `null` or `undefined`: Reject the resize completely (ignore the resize)
+ *   - `{width, height}`: Accept the resize with these dimensions (can be original or modified)
+ */
+export type ResizeHandler = (
+  width: number,
+  height: number
+) => {
+  width: number;
+  height: number;
+} | null | undefined;
+
 // Muuri Grid Props Interface
 export interface MuuriGridProps {
   itemSelector?: string;
@@ -30,7 +48,7 @@ export interface MuuriGridProps {
   class?: string;
 }
 
-// Muuri Item Props Interface  
+// Muuri Item Props Interface
 export interface MuuriItemProps {
   id?: string | number;
   class?: string;
