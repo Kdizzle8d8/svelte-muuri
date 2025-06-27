@@ -24,11 +24,8 @@
 <h2>Simple Muuri Example</h2>
 <p>Drag and drop the items below:</p>
 
-{#snippet aspectBox(aspectRatio: number, scale: number)}
-  <div class="relative">
-    <div class="absolute inset-0" style="padding-top: {aspectRatio * 100}%"></div>
-    <div class="absolute inset-0" style="transform: scale({scale})"></div>
-  </div>
+{#snippet resizeHandle()}
+  <div class="absolute bottom-0 right-0  size-6 cursor-se-resize bg-blue-500 rounded"></div>
 {/snippet}
 <Grid class="h-full w-[80%] gap-2 border-2 border border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.07)] px-0 py-2.5">
   {#each items as item (item.id)}
@@ -48,7 +45,9 @@
       </div>
     </GridItem>
   {/each}
-  <GridItem width={100} height={100}>
+
+
+  <GridItem resizeable={true} width={100} height={100} resizeHandle={resizeHandle}>
     <div
       class="text-small flex size-full flex-col items-center justify-center overflow-hidden border-2 border-black bg-red-500 p-0 text-center text-white">
       Freeform
