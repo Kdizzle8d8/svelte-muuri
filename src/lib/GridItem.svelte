@@ -50,7 +50,6 @@
     }
   });
 
-  // Move onResize logic to a function
   function handleResize(newWidth: number, newHeight: number) {
     const prevWidth = width;
     const prevHeight = height;
