@@ -1,7 +1,6 @@
 <script lang="ts">
   import Grid from "$lib/Grid.svelte";
   import GridItem from "$lib/GridItem.svelte";
-  import { onMount, tick } from "svelte";
 
   let items = $state(
     Array.from({ length: 8 }, (_, i) => ({
