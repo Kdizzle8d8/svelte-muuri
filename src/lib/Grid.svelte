@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { onMount, tick } from "svelte";
-  import { twMerge } from "tailwind-merge";
   import { setContext } from "svelte";
   import type { GridOptions, Item } from "muuri";
 
@@ -74,11 +73,12 @@
   });
 </script>
 
-<div
-  bind:this={gridElement}
-  class={twMerge(
-    "relative",
-    className
-  )}>
+<div bind:this={gridElement} class="{className} gridParent">
   {@render children()}
 </div>
+
+<style>
+  .gridParent{
+    position: relative;
+  }
+</style>
