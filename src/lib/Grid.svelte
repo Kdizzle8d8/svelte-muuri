@@ -73,12 +73,12 @@
   });
 </script>
 
-<div bind:this={gridElement} class="grid">
+<div bind:this={gridElement} class="{className} gridParent">
   {@render children()}
 </div>
 
 <style>
-  .grid{
+  .gridParent{
     position: relative;
   }
 </style>
