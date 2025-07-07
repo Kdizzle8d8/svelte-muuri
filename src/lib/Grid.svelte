@@ -22,7 +22,7 @@
   onMount(async () => {
     const MuuriConstructor = (await import("muuri")).default;
 
-    const config: GridOptions = muuriConfig || {
+    const defaultConfig = {
       dragEnabled: true,
       layout: {
         fillGaps: true,
@@ -49,6 +49,10 @@
           return node;
         }
       }
+    }
+    const config: GridOptions = {
+      ...defaultConfig,
+      ...muuriConfig
     };
 
     grid = new (MuuriConstructor as any)(gridElement, config);

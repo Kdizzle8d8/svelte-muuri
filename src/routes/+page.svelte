@@ -26,15 +26,15 @@
 {#snippet resizeHandle()}
   <div class="absolute bottom-0 right-0  size-6 cursor-se-resize bg-blue-500 rounded"></div>
 {/snippet}
-<Grid class="h-full w-[80%] gap-2 border-2 border border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.07)] px-0 py-2.5">
+<Grid class="h-min-[50%] w-[80%] gap-2 border-2  border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg  px-0 py-2.5">
   {#each items as item (item.id)}
     <GridItem
       width={getDimensions(item).width}
       height={getDimensions(item).height}
-      resizeHandler={(newDimensions, prevDimensions) => {
+      resizeHandler={(from, to) => {
         return { 
-          width: item.lockedDims.width ? prevDimensions.width : newDimensions.width, 
-          height: item.lockedDims.height ? prevDimensions.height : newDimensions.height 
+          width: from.width ? to.width : from.width, 
+          height: from.height ? to.height : from.height 
         };
       }}
       aspectRatio={item.aspectRatio}>
@@ -56,48 +56,48 @@
     width={200}
     height={200}
     lockedDimensions={dimLocked}
-    resizeHandler={(newDimensions, prevDimensions) => {
+    resizeHandler={(from, to) => {
       // Example use case of a custom resize handler with min/max aspect ratios
       const minAspect = 4/3;
       const maxAspect = 21 / 9;
       
-      const currentAspect = newDimensions.width / newDimensions.height;
+      const currentAspect = from.width / from.height;
       
       if (currentAspect < minAspect) {
         // Current aspect is too narrow, need to widen or shorten
-        if (newDimensions.width === prevDimensions.width) {
+        if (from.width === to.width) {
           // Width is locked, adjust height to achieve minimum aspect
           return {
-            width: newDimensions.width,
-            height: newDimensions.width / minAspect
+            width: from.width,
+            height: from.width / minAspect
           };
         } else {
           // Height is locked or neither is locked, adjust width
           return {
-            width: newDimensions.height * minAspect,
-            height: newDimensions.height
+            width: from.height * minAspect,
+            height: from.height
           };
         }
       }
       
       if (currentAspect > maxAspect) {
         // Current aspect is too wide, need to narrow or lengthen
-        if (newDimensions.width === prevDimensions.width) {
+        if (from.width === to.width) {
           // Width is locked, adjust height to achieve maximum aspect
           return {
-            width: newDimensions.width,
-            height: newDimensions.width / maxAspect
+            width: from.width,
+            height: from.width / maxAspect
           };
         } else {
           // Height is locked or neither is locked, adjust width
           return {
-            width: newDimensions.height * maxAspect,
-            height: newDimensions.height
+            width: from.height * maxAspect,
+            height: from.height
           };
         }
       }
       
-      return newDimensions;
+      return from;
     }}
   >
     <div
