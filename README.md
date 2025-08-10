@@ -39,7 +39,9 @@ The `Grid` component accepts the following props:
 - **persistKey** (optional, string): When provided, enables automatic persistence of the grid layout to localStorage. The grid will automatically save item positions and dimensions when they change, and restore the layout when the component is re-initialized.
 - **children** (`Snippet`): The grid items to be rendered inside the grid.
 
-#### Persistence Feature
+The only default style Grid has is  `position: relative;` which as far as I'm aware is required for Muuri to function properly.
+
+#### Persistence
 
 When you provide a `persistKey` prop, the Grid component will automatically:
 
@@ -60,8 +62,6 @@ Example with persistence:
 ```
 
 The persistence system is completely optional - simply omit the `persistKey` prop if you don't need it.
-
-The only default style Grid has is  `position: relative;` which as far as I'm aware is required for Muuri to function properly.
 
 ### `<GridItem/>`
 
