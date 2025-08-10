@@ -7,6 +7,7 @@
   const parentContext: { refresh: () => void } = getContext("grid");
 
   interface Props {
+    id?: string;
     class?: string;
     width?: number;
     height?: number;
@@ -19,6 +20,7 @@
   }
 
   let {
+    id,
     class: className = "",
     width = 100,
     height = 100,
@@ -30,6 +32,7 @@
     resizeHandle
   }: Props = $props();
 
+  // Ref to the actual DOM element
   let item = $state<HTMLElement>();
 
   let mounted = $state(false);
@@ -100,7 +103,7 @@
   }
 </script>
 
-<div bind:this={item} class="item {className}">
+<div bind:this={item} class="item {className}" data-id={id}>
   <div class="item-content">
     {@render children()}
   </div>

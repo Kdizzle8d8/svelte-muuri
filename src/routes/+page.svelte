@@ -18,6 +18,9 @@
   };
   // Start with no dimensions locked
   let dimLocked = $state({width: false, height: false});
+  let freeformLocked = $state({width: false, height: false});
+
+
 </script>
 
 <h2>Simple Muuri Example</h2>
@@ -26,9 +29,10 @@
 {#snippet resizeHandle()}
   <div class="absolute bottom-0 right-0  size-6 cursor-se-resize bg-blue-500 rounded"></div>
 {/snippet}
-<Grid class="h-min-[50%] w-[80%] gap-2 border-2  border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg  px-0 py-2.5">
+<Grid persistKey="tabforge-demo" class="h-min-[50%] w-[80%] gap-2 border-2  border-red-500 mx-auto my-8 bg-[#f5f5f5] rounded-lg  px-0 py-2.5">
   {#each items as item (item.id)}
     <GridItem
+      id={`item-${item.id}`}
       width={getDimensions(item).width}
       height={getDimensions(item).height}
       resizeHandler={(from, to) => {
@@ -46,13 +50,28 @@
   {/each}
 
 
-  <GridItem resizeable={true} width={100} height={100} resizeHandle={resizeHandle}>
-    <div
-      class="text-small flex size-full flex-col items-center justify-center overflow-hidden border-2 border-black bg-red-500 p-0 text-center text-white">
-      Freeform
+  <GridItem id="freeform" resizeable={true} width={100} height={100} lockedDimensions={freeformLocked} resizeHandle={resizeHandle}>
+    <div class="relative size-full">
+      <div class="absolute text-white top-1 right-1 flex gap-1 z-10">
+        <button
+          class="w-6 h-6 rounded-md text-xs flex items-center justify-center border-2 border-black {freeformLocked.width ? 'bg-green-500' : 'bg-blue-500'}"
+          onclick={() => freeformLocked = { ...freeformLocked, width: !freeformLocked.width }}>
+          W
+        </button>
+        <button
+          class="w-6 h-6 rounded-md text-xs flex items-center justify-center border-2 border-black {freeformLocked.height ? 'bg-green-500' : 'bg-blue-500'}"
+          onclick={() => freeformLocked = { ...freeformLocked, height: !freeformLocked.height }}>
+          H
+        </button>
+      </div>
+      <div
+        class="text-small flex size-full flex-col items-center justify-center overflow-hidden border-2 border-black bg-red-500 p-0 text-center text-white">
+        Freeform
+      </div>
     </div>
   </GridItem>
   <GridItem
+    id="aspect-locked"
     width={200}
     height={200}
     lockedDimensions={dimLocked}

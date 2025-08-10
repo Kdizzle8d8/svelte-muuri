@@ -1,5 +1,7 @@
 # Svelte-Muuri
 
+
+
 A W.I.P Svelte wrapper around the [Muuri](https://muuri.dev) layout engine
 # Getting Started
 
@@ -34,7 +36,30 @@ The `Grid` component accepts the following props:
 - **dragEnabled** (optional, boolean): When set to `false`, it disables the ability to drag items within the grid.
 - **muuriConfig** (optional, `GridOptions`): An object that follows the [Muuri Grid Options](https://docs.muuri.dev/grid-options.html) specification, allowing you to customize the grid's behavior.
 - **class** (optional, string): CSS classes to apply to the grid container.
+- **persistKey** (optional, string): When provided, enables automatic persistence of the grid layout to localStorage. The grid will automatically save item positions and dimensions when they change, and restore the layout when the component is re-initialized.
 - **children** (`Snippet`): The grid items to be rendered inside the grid.
+
+#### Persistence Feature
+
+When you provide a `persistKey` prop, the Grid component will automatically:
+
+- **Save state**: Persist item positions, dimensions, and order to localStorage whenever items are moved or resized
+- **Restore state**: Load the saved layout when the grid is initialized
+- **Handle changes**: Automatically update the saved state as users interact with the grid
+
+Example with persistence:
+
+```svelte
+<Grid persistKey="my-dashboard-layout" class="w-[80%] h-min-[60%] border-2 border-black">
+  {#each items as _, i}
+    <GridItem width={100} height={100}>
+      Item {i}
+    </GridItem>
+  {/each}
+</Grid>
+```
+
+The persistence system is completely optional - simply omit the `persistKey` prop if you don't need it.
 
 The only default style Grid has is  `position: relative;` which as far as I'm aware is required for Muuri to function properly.
 
